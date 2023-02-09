@@ -1,23 +1,50 @@
 import axiosRequest from "../services/axiosRequest"
-import { useState } from 'react'
-import { useForm } from "react-hook-form";
-import { ErrorMessage } from '@hookform/error-message';
-import { LogUser } from "../services/api";
+import { useState, useEffect } from 'react'
+import { useNavigate } from "react-router-dom";
+
 // Formulaire de connexion
 // ---- Champs de connexion : email & password
 // ---- Affichage des erreurs : champ manquant, utilisateur inexistant ou mauvais mot de passe
 
-const Login = () => {
+const Login = ({ user }) => {
 //   const [response, setResponse] = useState()
-//   const { register, formState: { errors }, handleSubmit } = useForm();
+  const navigate=useNavigate();
+ 
   
-  const onSubmit = e => {
+  const onSubmit = async (e) => {
      e.preventDefault(); 
-     
+    
     const data = new FormData(e.target) 
-    const user = { email : data.get('email'), password : data.get('password') }
-    console.log(user)
-    LogUser(user); 
+    const logUser = { email : data.get('email'), password : data.get('password') }
+
+    try {
+      const response = await axiosRequest.post('/login', logUser)
+      const res = response.data
+      localStorage.setItem("token", res.token)
+      const getUser = await axiosRequest.get(`/users/${res.userId}`)
+      localStorage.setItem('user', JSON.stringify(getUser.data.user))
+      if(getUser.status === 200) {
+        user(getUser.data.user)
+        navigate('/')
+      }
+    }
+    catch (error) {
+      //TODO gestion correct des erreurs
+          if (error.response) {
+              console.log(error.response.data.message)
+              // The request was made and the server responded with a status code
+              // that falls out of the range of 2xx
+            } else if (error.request) {
+              // The request was made but no response was received
+              // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+              // http.ClientRequest in node.js
+              console.log(error.request)
+            } else {
+              // Something happened in setting up the request that triggered an Error
+              console.log('Error', error.message)
+            }
+            console.log(error.config) 
+    }
   }
 
   return (
@@ -33,15 +60,10 @@ const Login = () => {
                 <div className="ui left icon input">
                   <i className="user icon"></i>
                   <input
-                    // {...register("singleErrorInput", {
-                    //   required: "This is required",
-                    // })}
                     type="text"
                     name="email"
                     placeholder="Adresse mail"
                   />
-                  {/* <ErrorMessage errors={errors} name="singleErrorInput" /> */}
-
                 
                 </div>
               </div>
