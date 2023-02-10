@@ -4,18 +4,18 @@ import { UserForm } from '@comp/UserForm'
 import { Container, Header } from 'semantic-ui-react'
 
 const FormHeader = () => (
-  <Header as='h2'>
+  <Header as='h1' textAlign="center">
     Ajouter un utilisateur
   </Header>
 )
 
-const CreateUser = () => {
+const CreateUser = ({ user }) => {
 
   return (
     <div>
       <Container>
         <FormHeader />
-        <UserForm methode="add" />
+        <UserForm methode="add" isAdmin={ user ? user.isAdmin : false} />
       </Container>
     </div>
   )

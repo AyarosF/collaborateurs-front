@@ -1,4 +1,4 @@
-import { Container, Input, Select } from 'semantic-ui-react'
+import { Container, Input, Select, Divider } from 'semantic-ui-react'
 
 const UserFilter = ({ setSearchTerm, searchTerm, setSearchSelectionInfo, searchSelectionInfo, setSearchSelectionCat, searchSelectionCat }) => {
 
@@ -26,10 +26,13 @@ const UserFilter = ({ setSearchTerm, searchTerm, setSearchSelectionInfo, searchS
     }
 
     return (
-        <Container>
-            <Input placeholder="Recherche" onChange={ handleInputFilter } value={ searchTerm } />  
-            <Select options={ infoOptions } onChange={ handleSelectInfo } value={ searchSelectionInfo } />
-            <Select options={ catOptions } onChange={ handleSelectCat } value={ searchSelectionCat }/>
+        <Container textAlign="center">
+            <Input type="text" placeholder="Rechercher..." onChange={ handleInputFilter } value={ searchTerm } action>
+                <input  />
+                <Select options={ infoOptions } onChange={ handleSelectInfo } defaultValue={ searchSelectionInfo } />
+                <Select options={ catOptions } onChange={ handleSelectCat } defaultValue={ searchSelectionCat }/>
+            </Input>
+            <Divider  />
         </Container>
     )
 }

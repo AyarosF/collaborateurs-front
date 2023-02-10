@@ -1,15 +1,17 @@
 import axiosRequest from "../services/axiosRequest"
 import { useState, useEffect } from 'react'
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"
+import ErrorMessage from "@comp/ErrorMessage"
 
 // Formulaire de connexion
 // ---- Champs de connexion : email & password
 // ---- Affichage des erreurs : champ manquant, utilisateur inexistant ou mauvais mot de passe
 
 const Login = ({ user }) => {
-//   const [response, setResponse] = useState()
-  const navigate=useNavigate();
- 
+
+  const [alert, setAlert] = useState(false)
+
+  const navigate=useNavigate(); 
   
   const onSubmit = async (e) => {
      e.preventDefault(); 
@@ -29,26 +31,23 @@ const Login = ({ user }) => {
       }
     }
     catch (error) {
-      //TODO gestion correct des erreurs
-          if (error.response) {
-              console.log(error.response.data.message)
-              // The request was made and the server responded with a status code
-              // that falls out of the range of 2xx
-            } else if (error.request) {
-              // The request was made but no response was received
-              // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-              // http.ClientRequest in node.js
-              console.log(error.request)
-            } else {
-              // Something happened in setting up the request that triggered an Error
-              console.log('Error', error.message)
-            }
-            console.log(error.config) 
+      if (error.response) {
+        console.log(error.response.data.message)
+      } else if (error.request) {
+        console.log(error.request)
+      } else {
+        console.log('Error', error.message)
+      }
+      setAlert(error.response.data.message)
+      console.log(error.config) 
     }
   }
 
   return (
     <div className="ui text container">
+      {alert && (
+        <ErrorMessage alert={alert} />
+      )}
       <div className="ui middle aligned center aligned grid">
         <div className="column">
           <h2 className="ui teal image header">

@@ -30,9 +30,14 @@ function App() {
             <Route path="collaborateurs" element={<List user = { currentUser }/>} />
             <Route path="add" element={
               <PrivateRoute user={ currentUser }>
-                <CreateUser />
-              </PrivateRoute>} />
-            <Route path="edit/:id" element={<Profile user={ currentUser } />}/>
+                <CreateUser user={ currentUser } />
+              </PrivateRoute>} 
+            />
+            <Route path="edit/:id" element={
+              <PrivateRoute user={ currentUser }>
+                <Profile user={ currentUser } />
+              </PrivateRoute>}
+            />
             <Route path="login" element={<Login user = { handleLoggedUser }/>} />
         </Routes>
       </Router>
