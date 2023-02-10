@@ -32,6 +32,7 @@ export const UserForm = (props) => {
     });
   };
 
+  // Vérification du mot de passe
   const verifyPassword = (editUser) => {
     let isValid = true;
     if (editUser.password && editUser.password !== "") {
@@ -48,19 +49,19 @@ export const UserForm = (props) => {
     return isValid;
   };
 
+  // Envoi du formulaire (add ou edit)
   const onSubmit = async (e) => {
     e.preventDefault();
 
     const data = new FormData(e.target);
+    // Ajustement de la valeur de "gender"
     let newGender = "autre";
     genders.map((gen) => {
       if (gen.text === user.gender) newGender = gen.value;
     });
     data.append("gender", newGender);
     data.append("category", user.category);
-
-    // Contraintes update : cas des champs vides/non modifiés
-
+    
     let editUser = {};
     for (const entry of data.entries()) {
       editUser = { ...editUser, [entry[0]]: entry[1] };
